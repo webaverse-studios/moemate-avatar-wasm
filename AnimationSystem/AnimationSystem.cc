@@ -30,6 +30,7 @@ namespace AnimationSystem {
   float localVecQuatArr[4];
   float localWeightArr[4];
   float localStartTimeSArr[4];
+  float localSpeedArr[4] = {1, 1, 1, 1};
   
   float *localVecQuatPtr;
   float *localVecQuatPtr2;
@@ -626,6 +627,7 @@ namespace AnimationSystem {
     } else if (j["type"] == "think") {
       this->thinkState = true;
       this->thinkStartTimeS = j["startTimeS"];
+      this->thinkSpeed= j["speed"];
       this->thinkAnimationIndex = animationGroupsMap["think"][this->actions["think"]["animation"]].index;
     } else if (j["type"] == "listen") {
       this->listenState = true;
@@ -860,7 +862,7 @@ namespace AnimationSystem {
     return resultVecQuat;
   }
 
-  float *doBlendList(AnimationMapping &spec, std::vector<Animation *> &animations, float *weights, float *startTimeS) { // note: Big performance influnce!!! Use `&` to prevent copy parameter's values!!!
+  float *doBlendList(AnimationMapping &spec, std::vector<Animation *> &animations, float *weights, float *startTimeS, float *speed) { // note: Big performance influnce!!! Use `&` to prevent copy parameter's values!!!
     float *resultVecQuat;
     unsigned int indexWeightBigThanZero = 0;
     float currentWeight = 0;
@@ -869,8 +871,8 @@ namespace AnimationSystem {
       if (weight > 0) {
         Animation *animation = animations[i];
         float animationTime = AnimationMixer::nowS - startTimeS[i];
-        float t2 = min(animationTime, animations[i]->duration);
-        float *vecQuat = evaluateInterpolant(animation, spec.index, t2);
+        float t2 = min(animationTime, animations[i]->duration / speed[i]);
+        float *vecQuat = evaluateInterpolant(animation, spec.index, t2 * speed[i]);
         if (indexWeightBigThanZero == 0) {
           resultVecQuat = vecQuat;
 
@@ -908,12 +910,13 @@ namespace AnimationSystem {
       localAnimationGroups[2] = thinkAnimation;
       localWeightArr[2] = avatar->thinkTransitionFactor;
       localStartTimeSArr[2] = avatar->thinkStartTimeS;
+      localSpeedArr[2] = avatar->thinkSpeed;
       localAnimationGroups[3] = listenAnimation;
       localWeightArr[3] = avatar->listenTransitionFactor;
       localStartTimeSArr[3] = avatar->listenStartTimeS;
 
       
-      localVecQuatPtr = doBlendList(spec, localAnimationGroups, localWeightArr, localStartTimeSArr);
+      localVecQuatPtr = doBlendList(spec, localAnimationGroups, localWeightArr, localStartTimeSArr, localSpeedArr);
       interpolateFlat(spec.dst, 0, spec.dst, 0, localVecQuatPtr, 0, avatar->idleFactorTransitionFactor, spec.isPosition);
     }
   }

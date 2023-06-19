@@ -147,6 +147,7 @@ namespace AnimationSystem {
     float speakStartTimeS;
     float thinkTransitionFactor;
     float thinkStartTimeS;
+    float thinkSpeed;
     float listenTransitionFactor;
     float listenStartTimeS;
     float idleFactorTransitionFactor;
