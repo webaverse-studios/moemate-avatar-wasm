@@ -1107,17 +1107,17 @@ AnimationGroupDeclarations declarations = {
       {
         "think1",
         thinkAnimationIndexes.Think1 = thinkAnimationIota++,
-        "think.fbx"
+        "think_intro.fbx"
       },
       {
         "think2",
         thinkAnimationIndexes.Think2 = thinkAnimationIota++,
-        "think.fbx"
+        "think1.fbx"
       },
       {
         "think3",
         thinkAnimationIndexes.Think3 = thinkAnimationIota++,
-        "think.fbx"
+        "think2.fbx"
       },
     }
   },
@@ -1128,17 +1128,17 @@ AnimationGroupDeclarations declarations = {
       {
         "listen1",
         listenAnimationIndexes.Listen1 = listenAnimationIota++,
-        "listen2.fbx"
+        "think_intro.fbx"
       },
       {
         "listen2",
         listenAnimationIndexes.Listen2 = listenAnimationIota++,
-        "listen2.fbx"
+        "think1.fbx"
       },
       {
         "listen3",
         listenAnimationIndexes.Listen3 = listenAnimationIota++,
-        "listen2.fbx"
+        "think2.fbx"
       },
     }
   },
