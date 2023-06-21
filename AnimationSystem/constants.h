@@ -102,7 +102,7 @@ public:
   int RandomIdle;
   int Speak;
   int Think;
-  int Listen;
+  int Search;
   int RandomSittingIdle;
   int Hold;
   int Hurt;
@@ -329,14 +329,14 @@ public:
 };
 ThinkAnimationIndexes thinkAnimationIndexes;
 
-int listenAnimationIota = 0;
-class ListenAnimationIndexes {
+int searchAnimationIota = 0;
+class SearchAnimationIndexes {
 public:
-  int Listen1;
-  int Listen2;
-  int Listen3;
+  int Search1;
+  int Search2;
+  int Search3;
 };
-ListenAnimationIndexes listenAnimationIndexes;
+SearchAnimationIndexes searchAnimationIndexes;
 
 int randomSittingIdleAnimationIota = 0;
 class RandomSittingIdleAnimationIndexes {
@@ -1122,23 +1122,23 @@ AnimationGroupDeclarations declarations = {
     }
   },
   {
-    "listen",
-    animationGroupIndexes.Listen = animationGroupIota++,
+    "search",
+    animationGroupIndexes.Search = animationGroupIota++,
     {
       {
-        "listen1",
-        listenAnimationIndexes.Listen1 = listenAnimationIota++,
-        "think_intro.fbx"
+        "search1",
+        searchAnimationIndexes.Search1 = searchAnimationIota++,
+        "keyboard_soft.fbx"
       },
       {
-        "listen2",
-        listenAnimationIndexes.Listen2 = listenAnimationIota++,
-        "think1.fbx"
+        "search2",
+        searchAnimationIndexes.Search2 = searchAnimationIota++,
+        "keyboard_soft.fbx"
       },
       {
-        "listen3",
-        listenAnimationIndexes.Listen3 = listenAnimationIota++,
-        "think2.fbx"
+        "search3",
+        searchAnimationIndexes.Search3 = searchAnimationIota++,
+        "keyboard_soft.fbx"
       },
     }
   },

@@ -115,6 +115,7 @@ namespace AnimationSystem {
     float danceFactor;
     float emoteTime;
     float lastEmoteTime;
+    float emoteStartTimeS;
     float idleWalkFactor;
     float useTime;
     float useAnimationEnvelopeLength;
@@ -148,8 +149,8 @@ namespace AnimationSystem {
     float thinkTransitionFactor;
     float thinkStartTimeS;
     float thinkSpeed;
-    float listenTransitionFactor;
-    float listenStartTimeS;
+    float searchTransitionFactor;
+    float searchStartTimeS;
     float idleFactorTransitionFactor;
     float randomSittingIdleTime;
     float randomSittingIdleDuration;
@@ -183,7 +184,7 @@ namespace AnimationSystem {
     bool randomIdleState;
     bool speakState;
     bool thinkState;
-    bool listenState;
+    bool searchState;
     bool randomSittingIdleState;
 
     //
@@ -202,7 +203,7 @@ namespace AnimationSystem {
     int randomIdleAnimationIndex;
     int speakAnimationIndex;
     int thinkAnimationIndex;
-    int listenAnimationIndex;
+    int searchAnimationIndex;
     int randomSittingIdleAnimationIndex;
 
     std::vector<int> useAnimationEnvelopeIndices;
