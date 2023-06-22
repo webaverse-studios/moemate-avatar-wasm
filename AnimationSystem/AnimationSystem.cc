@@ -19,7 +19,7 @@ namespace AnimationSystem {
   unsigned int defaultEmoteAnimationIndex;
   unsigned int defaultSpeakAnimationIndex;
   unsigned int defaultThinkAnimationIndex;
-  unsigned int defaultListenAnimationIndex;
+  unsigned int defaultSearchAnimationIndex;
   unsigned int defaultDanceAnimationIndex;
   unsigned int defaultHoldAnimationIndex;
   unsigned int defaultActivateAnimationIndex;
@@ -238,7 +238,7 @@ namespace AnimationSystem {
     avatar->actionInterpolants["randomIdleTransition"] = new BiActionInterpolant(0, 200);
     avatar->actionInterpolants["speakTransition"] = new BiActionInterpolant(0, 200);
     avatar->actionInterpolants["thinkTransition"] = new BiActionInterpolant(0, 200);
-    avatar->actionInterpolants["listenTransition"] = new BiActionInterpolant(0, 200);
+    avatar->actionInterpolants["searchTransition"] = new BiActionInterpolant(0, 200);
     avatar->actionInterpolants["idleFactorTransition"] = new BiActionInterpolant(0, 200);
     avatar->actionInterpolants["randomSittingIdle"] = new InfiniteActionInterpolant(0);
 
@@ -348,7 +348,7 @@ namespace AnimationSystem {
       defaultEmoteAnimationIndex = emoteAnimationIndexes.Angry;
       defaultSpeakAnimationIndex = speakAnimationIndexes.Speak1;
       defaultThinkAnimationIndex = thinkAnimationIndexes.Think1;
-      defaultListenAnimationIndex = listenAnimationIndexes.Listen1;
+      defaultSearchAnimationIndex = searchAnimationIndexes.Search1;
       defaultDanceAnimationIndex = danceAnimationIndexes.Dansu;
       defaultHoldAnimationIndex = holdAnimationIndexes.Pick_up_idle;
       defaultActivateAnimationIndex = activateAnimationIndexes.Grab_forward;
@@ -398,8 +398,8 @@ namespace AnimationSystem {
     this->actionInterpolants["randomIdleTransition"]->update(timeDiff, this->randomIdleState);
     this->actionInterpolants["speakTransition"]->update(timeDiff, this->speakState);
     this->actionInterpolants["thinkTransition"]->update(timeDiff, this->thinkState);
-    this->actionInterpolants["listenTransition"]->update(timeDiff, this->listenState);
-    this->actionInterpolants["idleFactorTransition"]->update(timeDiff, this->randomIdleState || this->speakState || this->thinkState || this->listenState);
+    this->actionInterpolants["searchTransition"]->update(timeDiff, this->searchState);
+    this->actionInterpolants["idleFactorTransition"]->update(timeDiff, this->randomIdleState || this->speakState || this->thinkState || this->searchState);
     this->actionInterpolants["randomSittingIdle"]->update(timeDiff, this->randomSittingIdleState);
   }
   void Avatar::update(float *scratchStack) {
@@ -509,7 +509,7 @@ namespace AnimationSystem {
 
     this->thinkTransitionFactor = this->actionInterpolants["thinkTransition"]->getNormalized();
 
-    this->listenTransitionFactor = this->actionInterpolants["listenTransition"]->getNormalized();
+    this->searchTransitionFactor = this->actionInterpolants["searchTransition"]->getNormalized();
     
     this->idleFactorTransitionFactor = this->actionInterpolants["idleFactorTransition"]->getNormalized();
 
@@ -604,6 +604,7 @@ namespace AnimationSystem {
       this->danceState = true;
     } else if (j["type"] == "emote") {
       this->emoteState = true;
+      this->emoteStartTimeS = j["startTimeS"];
     } else if (j["type"] == "hurt") {
       this->hurtState = true;
     } else if (j["type"] == "readyGrab") {
@@ -629,10 +630,10 @@ namespace AnimationSystem {
       this->thinkStartTimeS = j["startTimeS"];
       this->thinkSpeed= j["speed"];
       this->thinkAnimationIndex = animationGroupsMap["think"][this->actions["think"]["animation"]].index;
-    } else if (j["type"] == "listen") {
-      this->listenState = true;
-      this->listenStartTimeS = j["startTimeS"];
-      this->listenAnimationIndex = animationGroupsMap["listen"][this->actions["listen"]["animation"]].index;
+    } else if (j["type"] == "search") {
+      this->searchState = true;
+      this->searchStartTimeS = j["startTimeS"];
+      this->searchAnimationIndex = animationGroupsMap["search"][this->actions["search"]["animation"]].index;
     } else if (j["type"] == "randomSittingIdle") {
       this->randomSittingIdleState = true;
       this->randomSittingIdleDuration = j["duration"];
@@ -705,8 +706,8 @@ namespace AnimationSystem {
       this->speakState = false;
     } else if (j["type"] == "think") {
       this->thinkState = false;
-    } else if (j["type"] == "listen") {
-      this->listenState = false;
+    } else if (j["type"] == "search") {
+      this->searchState = false;
     } else if (j["type"] == "randomSittingIdle") {
       this->randomSittingIdleState = false;
     }
@@ -899,7 +900,7 @@ namespace AnimationSystem {
       Animation *randomIdleAnimation = animationGroups[animationGroupIndexes.RandomIdle][avatar->randomIdleAnimationIndex];
       Animation *speakAnimation = animationGroups[animationGroupIndexes.Speak][avatar->speakAnimationIndex < 0 ? defaultSpeakAnimationIndex : avatar->speakAnimationIndex];
       Animation *thinkAnimation = animationGroups[animationGroupIndexes.Think][avatar->thinkAnimationIndex < 0 ? defaultThinkAnimationIndex : avatar->thinkAnimationIndex];
-      Animation *listenAnimation = animationGroups[animationGroupIndexes.Listen][avatar->listenAnimationIndex < 0 ? defaultListenAnimationIndex : avatar->listenAnimationIndex];
+      Animation *searchAnimation = animationGroups[animationGroupIndexes.Search][avatar->searchAnimationIndex < 0 ? defaultSearchAnimationIndex : avatar->searchAnimationIndex];
       
       localAnimationGroups[0] = randomIdleAnimation;
       localWeightArr[0] = avatar->randomIdleTransitionFactor;
@@ -911,9 +912,9 @@ namespace AnimationSystem {
       localWeightArr[2] = avatar->thinkTransitionFactor;
       localStartTimeSArr[2] = avatar->thinkStartTimeS;
       localSpeedArr[2] = avatar->thinkSpeed;
-      localAnimationGroups[3] = listenAnimation;
-      localWeightArr[3] = avatar->listenTransitionFactor;
-      localStartTimeSArr[3] = avatar->listenStartTimeS;
+      localAnimationGroups[3] = searchAnimation;
+      localWeightArr[3] = avatar->searchTransitionFactor;
+      localStartTimeSArr[3] = avatar->searchStartTimeS;
 
       
       localVecQuatPtr = doBlendList(spec, localAnimationGroups, localWeightArr, localStartTimeSArr, localSpeedArr);
@@ -1017,7 +1018,7 @@ namespace AnimationSystem {
     _handleDefault(spec, avatar);
 
     Animation *emoteAnimation = animationGroups[animationGroupIndexes.Emote][avatar->emoteAnimationIndex < 0 ? defaultEmoteAnimationIndex : avatar->emoteAnimationIndex];
-    float t2 = min(avatar->emoteTime / 1000, emoteAnimation->duration);
+    float t2 = min(AnimationMixer::nowS - avatar->emoteStartTimeS, emoteAnimation->duration);
     float *v2 = evaluateInterpolant(emoteAnimation, spec.index, t2);
 
     float f0 = t2 / 0.2;
