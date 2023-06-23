@@ -102,46 +102,9 @@ namespace AnimationSystem {
     AnimationMixer *mixer;
 
     // values
-    float activateTime;
-    float landTime;
-    float fallLoopFactor;
-    float fallLoopTime;
-    float skydiveTime;
-    float gliderTime;
-    float flyTime;
-    float doubleJumpTime;
-    float jumpTime;
-    float narutoRunTime;
-    float danceFactor;
     float emoteTime;
     float lastEmoteTime;
     float emoteStartTimeS;
-    float idleWalkFactor;
-    float useTime;
-    float useAnimationEnvelopeLength;
-    float hurtTime;
-    float readyGrabTime;
-    float unuseTime;
-    float aimTime;
-    float aimMaxTime;
-    float walkRunFactor;
-    float crouchFactor;
-    float pickUpTime;
-    float forwardFactor;
-    float backwardFactor;
-    float leftFactor;
-    float rightFactor;
-    float mirrorLeftFactorReverse;
-    float mirrorLeftFactor;
-    float mirrorRightFactorReverse;
-    float mirrorRightFactor;
-    float landTimeS;
-    float timeSinceLastMoveS;
-    float swimTime;
-    float movementsTime;
-    float idleBias;
-    float sprintFactor;
-    float movementsTransitionFactor;
     float randomIdleTransitionFactor;
     float randomIdleStartTimeS;
     float speakTransitionFactor;
@@ -152,60 +115,22 @@ namespace AnimationSystem {
     float searchTransitionFactor;
     float searchStartTimeS;
     float idleFactorTransitionFactor;
-    float randomSittingIdleTime;
-    float randomSittingIdleDuration;
-    float randomSittingIdleSpeed;
 
     // states
-    bool jumpState;
-    bool doubleJumpState;
-    bool landState;
-    bool flyState;
-    bool crouchState;
-    bool narutoRunState;
-    bool sitState;
-    bool holdState;
-    bool pickUpState;
-    bool swimState;
-    bool activateState;
-    bool useState;
-    bool aimState;
-    bool fallLoopState;
-    bool skydiveState;
-    bool gliderState;
-    bool danceState;
     bool emoteState;
     bool hurtState;
-    bool readyGrabState;
-    bool rightHandState;
-    bool leftHandState;
-    bool sprintState;
-    bool movementsState;
     bool randomIdleState;
     bool speakState;
     bool thinkState;
     bool searchState;
-    bool randomSittingIdleState;
 
     //
-    bool landWithMoving;
-    bool fallLoopFromJump;
-
-    int activateAnimationIndex;
-    int sitAnimationIndex;
-    int danceAnimationIndex;
     int emoteAnimationIndex;
-    int useAnimationIndex;
-    int useAnimationComboIndex;
-    int hurtAnimationIndex;
-    int unuseAnimationIndex;
-    int aimAnimationIndex;
     int randomIdleAnimationIndex;
     int speakAnimationIndex;
     int thinkAnimationIndex;
     int searchAnimationIndex;
-    int randomSittingIdleAnimationIndex;
-
+    
     std::vector<int> useAnimationEnvelopeIndices;
 
     //
