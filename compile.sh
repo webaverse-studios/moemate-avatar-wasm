@@ -24,7 +24,7 @@ if [ ! -f physx-timestamp ]; then
 fi
 
 echo 'building main...'
-emcc -s NO_EXIT_RUNTIME=1 -s TOTAL_MEMORY=209715200 -D__linux__ -s ALLOW_MEMORY_GROWTH=0 -O3 \
+emcc -s NO_EXIT_RUNTIME=1 -s TOTAL_MEMORY=65536000 -D__linux__ -s ALLOW_MEMORY_GROWTH=0 -O3 \
   $includes \
   objectize.cc \
   physics-base.cc physics.cc AnimationSystem/AnimationSystem.cc \
@@ -36,3 +36,6 @@ emcc -s NO_EXIT_RUNTIME=1 -s TOTAL_MEMORY=209715200 -D__linux__ -s ALLOW_MEMORY_
 sed -Ei 's/scriptDirectory\+path/"\/"+path/g' bin/avatars-wasm.js
 echo 'let accept, reject;const p = new Promise((a, r) => {  accept = a;  reject = r;});Module.postRun = () => {  accept();};Module.waitForLoad = () => p;run();export default Module;' >> bin/avatars-wasm.js
 echo 'done building main'
+
+# Prevent compile window auto close after error, to see the error details. https://askubuntu.com/a/20353/1012283
+# exec $SHELL
